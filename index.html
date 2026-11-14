@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بيئة التعلم التفاعلية | مقرر بيئات التعلم</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #f8fafc; min-height: 100vh; display: flex; flex-direction: column; }
+        header { background: rgba(30, 41, 59, 0.85); backdrop-filter: blur(10px); padding: 1.2rem 2rem; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; }
+        header h1 { font-size: 1.4rem; color: #38bdf8; }
+        .badge { background: #0284c7; padding: 0.35rem 0.9rem; border-radius: 20px; font-size: 0.85rem; font-weight: bold; }
+        main { flex: 1; max-width: 1000px; margin: 2.5rem auto; padding: 0 1.5rem; width: 100%; }
+        .hero { background: rgba(30, 41, 59, 0.7); border: 1px solid #334155; border-radius: 16px; padding: 2.5rem; text-align: center; margin-bottom: 2rem; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        .hero h2 { font-size: 2rem; margin-bottom: 1rem; color: #f1f5f9; }
+        .hero p { color: #cbd5e1; font-size: 1.1rem; line-height: 1.7; max-width: 700px; margin: 0 auto 1.5rem; }
+        .btn { background: #38bdf8; color: #0f172a; border: none; padding: 0.8rem 2rem; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .btn:hover { background: #7dd3fc; transform: translateY(-2px); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+        .card { background: rgba(30, 41, 59, 0.7); border: 1px solid #334155; border-radius: 12px; padding: 1.5rem; transition: 0.2s; }
+        .card:hover { border-color: #38bdf8; }
+        .card h3 { color: #38bdf8; margin-bottom: 0.7rem; font-size: 1.2rem; }
+        .card p { color: #94a3b8; line-height: 1.6; font-size: 0.95rem; }
+        footer { text-align: center; padding: 1.2rem; color: #64748b; border-top: 1px solid #1e293b; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>منصة التعلم التفاعلية</h1>
+        <span class="badge">مقرر بيئات التعلم - التكليف السادس</span>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h2>مرحباً بك في بيئة التعلم الإلكترونية</h2>
+            <p>تم تصميم ونشر هذه البيئة التعليمية التفاعلية لدعم التعلم الذاتي وتقديم المحتوى الرقمي بأسلوب منظم وسهل الوصول عبر السحابة.</p>
+            <button class="btn" onclick="alert('أهلاً بك! البيئة التعليمية جاهزة وتعمل بنجاح.')">ابدأ رحلة التعلم</button>
+        </section>
+
+        <section class="grid">
+            <div class="card">
+                <h3>📚 المحتوى التفاعلي</h3>
+                <p>وحدات تعليمية مقسمة بشكل مبسط تساعد المتعلم على استيعاب المفاهيم الأساسية خطوة بخطوة.</p>
+            </div>
+            <div class="card">
+                <h3>🎯 الأهداف التعليمية</h3>
+                <p>تحديد واضح للمخرجات التعليمية المطلوبة بعد دراسة كل وحدة لضمان تحقيق الفهم الكامل.</p>
+            </div>
+            <div class="card">
+                <h3>✅ التقويم الذاتي</h3>
+                <p>أنشطة وتدريبات تفاعلية لقياس مستوى التقدم وتقديم تغذية راجعة فورية للمتعلم.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        إعداد الطالبة: ملك أحمد | تم النشر عبر GitHub & Vercel
+    </footer>
+</body>
+</html>
