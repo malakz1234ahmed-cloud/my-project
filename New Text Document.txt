@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محاكي الدوائر الكهربائية التفاعلي | بيئة تعلم رقمية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #0f172a;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--secondary), var(--primary-dark));
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: #cbd5e1;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: grid;
+            gap: 2rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            background: var(--card);
+            padding: 0.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            background: transparent;
+            color: var(--muted);
+            font-weight: 700;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .section {
+            display: none;
+            background: var(--card);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            animation: fadeIn 0.4s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            border-right: 4px solid var(--primary);
+            padding-right: 0.75rem;
+        }
+
+        .objectives-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .obj-card {
+            background: #eff6ff;
+            padding: 1.25rem;
+            border-radius: 12px;
+            border: 1px solid #bfdbfe;
+        }
+
+        .obj-card h3 {
+            color: var(--primary-dark);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Simulator Styles */
+        .sim-workspace {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .sim-workspace {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .controls-panel {
+            background: #f1f5f9;
+            padding: 1.5rem;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .control-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+            font-size: 0.95rem;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--primary);
+        }
+
+        .switch-btn {
+            padding: 1rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+            background: var(--danger);
+            color: white;
+        }
+
+        .switch-btn.closed {
+            background: var(--success);
+        }
+
+        .circuit-board {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 2rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 350px;
+            color: white;
+        }
+
+        .bulb-container {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .bulb {
+            width: 80px;
+            height: 80px;
+            background: #334155;
+            border-radius: 50%;
+            margin: 0 auto 0.5rem;
+            transition: all 0.3s ease;
+            border: 3px solid #64748b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .wire-box {
+            width: 80%;
+            height: 120px;
+            border: 6px solid #475569;
+            border-radius: 12px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            transition: border-color 0.3s;
+        }
+
+        .wire-box.active-flow {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+        }
+
+        .component-badge {
+            background: #1e293b;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid #475569;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .readings {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 1.5rem;
+            background: #1e293b;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+        .readings span {
+            color: var(--accent);
+        }
+
+        .feedback-banner {
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            text-align: center;
+            width: 100%;
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* Quiz Styles */
+        .quiz-item {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .quiz-item p {
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .options label {
+            display: block;
+            padding: 0.6rem 1rem;
+            margin-bottom: 0.5rem;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .options label:hover {
+            background: #eff6ff;
+        }
+
+        .submit-quiz {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        #quiz-result {
+            margin-top: 1rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>⚡ مختبر الدوائر الكهربائية الافتراضي</h1>
+    <p>بيئة تعلم تفاعلية لاستكشاف قانون أوم والعلاقة بين الجهد، المقاومة، وشدة التيار الكهربائي</p>
+</header>
+
+<div class="container">
+    <!-- Navigation Tabs -->
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('learn')">1. الأهداف والمفاهيم</button>
+        <button class="tab-btn" onclick="switchTab('simulate')">2. المختبر التفاعلي (المحاكي)</button>
+        <button class="tab-btn" onclick="switchTab('quiz')">3. التقييم الذاتي</button>
+    </div>
+
+    <!-- Section 1: Learn -->
+    <div id="learn" class="section active">
+        <h2>الأهداف التعليمية للبيئة</h2>
+        <p>بعد تفاعلك مع هذا المختبر الافتراضي، ستكون قادراً على:</p>
+        <div class="objectives-grid">
+            <div class="obj-card">
+                <h3>🔌 مكونات الدائرة</h3>
+                <p>التعرف على دور البطارية (مصدر الجهد)، المفتاح الكهربائي، المقاومة، والمصباح في إغلاق الدائرة.</p>
+            </div>
+            <div class="obj-card">
+                <h3>📐 تطبيق قانون أوم</h3>
+                <p>استنتاج العلاقة الرياضية بين الجهد (V) والمقاومة (R) وشدة التيار (I = V / R) عملياً.</p>
+            </div>
+            <div class="obj-card">
+                <h3>💡 تأثير المتغيرات</h3>
+                <p>ملاحظة أثر زيادة الجهد أو المقاومة على شدة إضاءة المصباح وسلامة الدائرة الكهربائية.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 2: Simulator -->
+    <div id="simulate" class="section">
+        <h2>محاكي الدائرة الكهربائية البسيطة</h2>
+        <p>تحكم في قيم الجهد والمقاومة، ثم أغلق المفتاح لمشاهدة سريان التيار وتغير شدة الإضاءة:</p>
+
+        <div class="sim-workspace">
+            <div class="controls-panel">
+                <button id="switchBtn" class="switch-btn" onclick="toggleSwitch()">المفتاح: مفتوح (الدائرة مفصولة)</button>
+
+                <div class="control-group">
+                    <label>الجهد الكهربائي (البطارية): <span id="voltVal">9</span> فولت (V)</label>
+                    <input type="range" id="voltSlider" min="1" max="24" value="9" oninput="updateCircuit()">
+                </div>
+
+                <div class="control-group">
+                    <label>قيمة المقاومة الكهربائية: <span id="resVal">10</span> أوم (Ω)</label>
+                    <input type="range" id="resSlider" min="2" max="50" value="10" oninput="updateCircuit()">
+                </div>
+            </div>
+
+            <div class="circuit-board">
+                <div class="bulb-container">
+                    <div id="bulb" class="bulb">💡</div>
+                    <small id="bulbStatus">المصباح مطفأ</small>
+                </div>
+
+                <div id="wireBox" class="wire-box">
+                    <div class="component-badge">🔋 بطارية<br><strong id="boardVolt">9V</strong></div>
+                    <div class="component-badge" id="boardSwitch">🔌 مفتاح مفتوح</div>
+                    <div class="component-badge">〰️ مقاومة<br><strong id="boardRes">10Ω</strong></div>
+                </div>
+
+                <div class="readings">
+                    <div>شدة التيار (I): <span id="currentVal">0.00</span> أمبير</div>
+                    <div>القدرة (P): <span id="powerVal">0.00</span> وات</div>
+                </div>
+
+                <div id="feedbackBanner" class="feedback-banner">
+                    قم بإغلاق المفتاح الكهربائي لبدء سريان التيار في الدائرة.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 3: Quiz -->
+    <div id="quiz" class="section">
+        <h2>اختبر فهمك (التقييم الذاتي)</h2>
+        <div class="quiz-item">
+            <p>1. عند زيادة قيمة المقاومة في الدائرة مع ثبات الجهد، ماذا يحدث لشدة التيار وإضاءة المصباح؟</p>
+            <div class="options">
+                <label><input type="radio" name="q1" value="a"> تزداد شدة التيار وتقوى الإضاءة</label>
+                <label><input type="radio" name="q1" value="b"> تقل شدة التيار وتضعف الإضاءة</label>
+                <label><input type="radio" name="q1" value="c"> لا تتأثر شدة التيار</label>
+            </div>
+        </div>
+
+        <div class="quiz-item">
+            <p>2. إذا كان جهد البطارية 12 فولت والمقاومة 4 أوم، فكم تبلغ شدة التيار المار في الدائرة؟</p>
+            <div class="options">
+                <label><input type="radio" name="q2" value="a"> 3 أمبير</label>
+                <label><input type="radio" name="q2" value="b"> 48 أمبير</label>
+                <label><input type="radio" name="q2" value="c"> 8 أمبير</label>
+            </div>
+        </div>
+
+        <button class="submit-quiz" onclick="checkQuiz()">تحقق من الإجابات</button>
+        <div id="quiz-result"></div>
+    </div>
+</div>
+
+<footer>
+    تصميم وتطوير بيئة تعلم تفاعلية — مقرر بيئات التعلم
+</footer>
+
+<script>
+    let isSwitchClosed = false;
+
+    function switchTab(tabId) {
+        document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        
+        document.getElementById(tabId).classList.add('active');
+        event.target.classList.add('active');
+    }
+
+    function toggleSwitch() {
+        isSwitchClosed = !isSwitchClosed;
+        const btn = document.getElementById('switchBtn');
+        const boardSwitch = document.getElementById('boardSwitch');
+
+        if (isSwitchClosed) {
+            btn.textContent = "المفتاح: مغلق (الدائرة متصلة)";
+            btn.classList.add('closed');
+            boardSwitch.innerHTML = "🔗 مفتاح مغلق";
+        } else {
+            btn.textContent = "المفتاح: مفتوح (الدائرة مفصولة)";
+            btn.classList.remove('closed');
+            boardSwitch.innerHTML = "🔌 مفتاح مفتوح";
+        }
+        updateCircuit();
+    }
+
+    function updateCircuit() {
+        const volt = parseFloat(document.getElementById('voltSlider').value);
+        const res = parseFloat(document.getElementById('resSlider').value);
+
+        document.getElementById('voltVal').textContent = volt;
+        document.getElementById('resVal').textContent = res;
+        document.getElementById('boardVolt').textContent = volt + "V";
+        document.getElementById('boardRes').textContent = res + "Ω";
+
+        const bulb = document.getElementById('bulb');
+        const bulbStatus = document.getElementById('bulbStatus');
+        const wireBox = document.getElementById('wireBox');
+        const currentDisplay = document.getElementById('currentVal');
+        const powerDisplay = document.getElementById('powerVal');
+        const banner = document.getElementById('feedbackBanner');
+
+        if (!isSwitchClosed) {
+            bulb.style.background = "#334155";
+            bulb.style.boxShadow = "none";
+            bulbStatus.textContent = "المصباح مطفأ";
+            wireBox.classList.remove('active-flow');
+            currentDisplay.textContent = "0.00";
+            powerDisplay.textContent = "0.00";
+            banner.textContent = "الدائرة مفتوحة: لا يوجد مسار مغلق لمرور الإلكترونات.";
+            banner.style.color = "#cbd5e1";
+            return;
+        }
+
+        const current = volt / res;
+        const power = volt * current;
+
+        currentDisplay.textContent = current.toFixed(2);
+        powerDisplay.textContent = power.toFixed(2);
+        wireBox.classList.add('active-flow');
+
+        if (current > 4.5) {
+            bulb.style.background = "#ef4444";
+            bulb.style.boxShadow = "0 0 35px #ef4444";
+            bulbStatus.textContent = "⚠️ تحذير: تيار مرتفع جداً!";
+            banner.textContent = "تنبيه: شدة التيار عالية جداً مما قد يؤدي إلى تلف المصباح! ارفع قيمة المقاومة.";
+            banner.style.color = "#fca5a5";
+        } else {
+            const intensity = Math.min(current / 3, 1);
+            bulb.style.background = `rgba(250, 204, 21, ${0.3 + intensity * 0.7})`;
+            bulb.style.boxShadow = `0 0 ${15 + intensity * 40}px rgba(250, 204, 21, ${intensity})`;
+            bulbStatus.textContent = current > 1.5 ? "إضاءة قوية" : "إضاءة متوسطة / خافتة";
+            banner.textContent = `التيار يسري بنجاح وفق قانون أوم: (${volt}V ÷ ${res}Ω = ${current.toFixed(2)}A).`;
+            banner.style.color = "#86efac";
+        }
+    }
+
+    function checkQuiz() {
+        const q1 = document.querySelector('input[name="q1"]:checked');
+        const q2 = document.querySelector('input[name="q2"]:checked');
+        const resultDiv = document.getElementById('quiz-result');
+
+        if (!q1 || !q2) {
+            resultDiv.textContent = "يرجى الإجابة على جميع الأسئلة أولاً.";
+            resultDiv.style.color = "#f59e0b";
+            return;
+        }
+
+        let score = 0;
+        if (q1.value === 'b') score++;
+        if (q2.value === 'a') score++;
+
+        if (score === 2) {
+            resultDiv.textContent = "🎉 ممتاز! إجاباتك صحيحة بنسبة 100% (2 من 2).";
+            resultDiv.style.color = "#10b981";
+        } else {
+            resultDiv.textContent = `حصلت على ${score} من 2. راجع التجربة في المختبر التفاعلي وحاول مرة أخرى!`;
+            resultDiv.style.color = "#ef4444";
+        }
+    }
+</script>
+
+</body>
+</html>
